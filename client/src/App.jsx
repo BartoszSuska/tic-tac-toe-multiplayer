@@ -10,6 +10,18 @@ function App() {
   const api_key = "ha9g99wf5pna"
   const token = cookies.get("token")
   const client = StreamChat.getInstance(api_key)
+  const [isAuth, setIsAuth] = useState(false)
+
+  const logOut = () => {
+    cookies.remove("token")
+    cookies.remove("userId")
+    cookies.remove("firstName")
+    cookies.remove("lastName")
+    cookies.remove("username")
+    cookies.remove("hashedPassword")
+    client.disconnectUser()
+    setIsAuth(false)
+  }
 
   if(token){
     client.connectUser({
@@ -20,13 +32,18 @@ function App() {
       hashedPassword: cookies.get("hashedPassword")
     }, token
     ).then((user) => {
-      console.log(user)
+      setIsAuth(true)
     })
   }
 
   return <div className="App">
-    <SignUp />
-    <Login />
+    {isAuth ? (<button onClick={logOut}>Log Out</button>) : (
+      <>
+        <SignUp setIsAuth={setIsAuth}/>
+        <Login setIsAuth={setIsAuth}/>
+      </>
+    )}
+
   </div>
 }
 
