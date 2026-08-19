@@ -2,7 +2,9 @@ import { useState } from 'react'
 import './App.css'
 import SignUp from './components/SignUp.jsx'
 import Login from './components/Login.jsx'
+import JoinGame from './components/JoinGame.jsx'
 import {StreamChat} from 'stream-chat'
+import {Chat} from 'stream-chat-react'
 import Cookies from 'universal-cookie'
 
 function App() {
@@ -37,7 +39,12 @@ function App() {
   }
 
   return <div className="App">
-    {isAuth ? (<button onClick={logOut}>Log Out</button>) : (
+    {isAuth ? (
+      <Chat client={client}>
+        <JoinGame />
+        <button onClick={logOut}>Log Out</button>
+      </Chat>
+    ) : (
       <>
         <SignUp setIsAuth={setIsAuth}/>
         <Login setIsAuth={setIsAuth}/>
